@@ -9,10 +9,11 @@ namespace Dp420Conexao.Model
     public class Product
     {
         [JsonProperty("id")]
-        public  Guid id {get;set;}
-        public  Guid categoryId  {get;set;}
-        public  string? name {get;set;}
-        public  double price {get;set;}
-        public  string[]? tags {get;set;}
+        public  Guid Id {get;set;}
+       
+        public  string CategoriaId  {get;set;}
+        public  string? Name {get;set;}
+        public  double Price {get;set;}
+        public  string[]? Tags {get;set;}
     }
 }

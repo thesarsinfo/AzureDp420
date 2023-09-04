@@ -18,10 +18,78 @@ public class CosmosApiController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPost()]
-    public async Task<IActionResult> PostProduto(ProductDTO produto)
-    {
-        var prodDTO = await _productService.Salvar(produto); 
-        return Ok(prodDTO); 
+
+
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct([FromBody] ProductDTO productDTO)
+        {
+            try
+            {
+                var produtoCriado = await _productService.Salvar(productDTO);
+                return CreatedAtAction(nameof(GetProduct), new { id = produtoCriado.Id }, produtoCriado);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{id}/{categoryId}")]
+        public async Task<IActionResult> GetProduct(Guid id, string categoryId)
+        {
+            try
+            {
+                var productReadDTO = new ProductReadDTO(id, categoryId);
+                var product = await _productService.LerDocumento(productReadDTO);
+                if (product == null)
+                {
+                    return NotFound();
+                }
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("{id}/{categoryId}")]
+        public async Task<IActionResult> UpdateProduct(Guid id, string categoryId, [FromBody] ProductDTO productDTO)
+        {
+            try
+            {
+                var productReadDTO = new ProductReadDTO(id, categoryId);
+                var updatedProduct = await _productService.AtualizarDocumento(productReadDTO, productDTO);
+                if (updatedProduct == null)
+                {
+                    return NotFound();
+                }
+                return Ok(updatedProduct);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}/{categoryId}")]
+        public async Task<IActionResult> DeleteProduct(Guid id, string categoryId)
+        {
+            try
+            {
+                var productReadDTO = new ProductReadDTO(id, categoryId);
+                var deleted = await _productService.ApagarDocumento(productReadDTO);
+                if (!deleted)
+                {
+                    return NotFound();
+                }
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
-}
+
+

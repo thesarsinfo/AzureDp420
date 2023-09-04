@@ -6,9 +6,9 @@ using Microsoft.Azure.Cosmos;
 
 namespace Dp420Conexao.Infrastructure.DatabaseContext
 {
-    public interface CosmosNoSQLContextInt
+    public interface ICosmosNoSQLContext
     {
-        Task IniciadorCosmo();        
-        Container ConsultarContainerCosmo(string container);
+        public Task IniciadorCosmo();        
+        public Container consultarContainerCosmo(string container);
     }
 }

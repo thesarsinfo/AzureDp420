@@ -1,8 +1,6 @@
-using System.Configuration;
 using Dp420Conexao.Infrastructure.DatabaseContext;
 using Dp420Conexao.Repository;
 using Dp420Conexao.Service;
-using Dp420Conexao.Service.Interfaces;
 using Infrastructure.DatabaseContext;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,8 +9,8 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .Build();
 builder.Services.Configure<CosmosDbSettings>(configuration.GetSection("CosmosDbSettings"));
-builder.Services.AddSingleton<CosmosNoSQLContextInt,CosmosNoSQLContext>();
-builder.Services.AddSingleton<ProdutoRepositoryInt, ProdutoRepository>();
+builder.Services.AddSingleton<ICosmosNoSQLContext,CosmosNoSQLContext>();
+builder.Services.AddSingleton<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddTransient<ProductService>();
 
 

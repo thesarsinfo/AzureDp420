@@ -5,7 +5,7 @@ using Microsoft.Azure.Cosmos;
 
 namespace Infrastructure.DatabaseContext
 {
-    public class CosmosNoSQLContext : CosmosNoSQLContextInt
+    public class CosmosNoSQLContext : ICosmosNoSQLContext
     {
         private readonly string databaseNome = "Teste420";
         private readonly IConfiguration _configuration;       
@@ -25,7 +25,7 @@ namespace Infrastructure.DatabaseContext
             try
             {
                 Database database = await client.CreateDatabaseIfNotExistsAsync("Teste420");
-                await database.CreateContainerIfNotExistsAsync("produto", "/categoriaId", 400);
+                await database.CreateContainerIfNotExistsAsync("produto", "/CategoriaId", 400);
                 
                 
             }
@@ -47,7 +47,7 @@ namespace Infrastructure.DatabaseContext
             }
             
         }
-        public Container ConsultarContainerCosmo(string container) 
+        public Container consultarContainerCosmo(string container) 
         {
             Database database = ConsultarCosmo();
             Container caixa = database.GetContainer(container);

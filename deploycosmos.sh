@@ -1,5 +1,5 @@
 az account clear
-az login
+az login --use-device-code
 subs=$(az account list --query '[].id' --output tsv)
 echo $subs
 #az account set --subscription $subs
