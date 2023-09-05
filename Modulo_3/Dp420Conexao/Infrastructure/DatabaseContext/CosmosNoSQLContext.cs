@@ -21,7 +21,8 @@ namespace Infrastructure.DatabaseContext
 
         public async Task IniciadorCosmo()
         {
-            using var client = new CosmosClient(_cosmosDbSettings.Endpoint, _cosmosDbSettings.KeyOne);
+            CosmosClientOptions options = new ()  { AllowBulkExecution = true };
+            using var client = new CosmosClient(_cosmosDbSettings.Endpoint, _cosmosDbSettings.KeyOne, options);
             try
             {
                 Database database = await client.CreateDatabaseIfNotExistsAsync("Teste420");

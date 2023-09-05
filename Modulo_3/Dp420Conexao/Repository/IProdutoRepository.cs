@@ -13,5 +13,7 @@ namespace Dp420Conexao.Repository
         Task<Product>  LerProduto ( string id, PartitionKey categoryId);
         Task<Product>  UpdateProduto ( Product produto);
         Task<bool> ApagarProduto ( string id, PartitionKey categoryId);
+        Task<TransactionalBatchResponse> CriarProdutosProntos();
+        Task<bool> CriarProdutosProntosBulk();
     }
 }

@@ -23,6 +23,13 @@ namespace Dp420Conexao.Service
             Product produtos = ToVO(produto);
             return _produto.CadastrarProduto(produtos);           
         }
+        public Task<TransactionalBatchResponse> SalvarBatch() {
+        var response  = _produto.CriarProdutosProntos();
+        return response;
+        }
+        public async Task<bool>  CriarProdutosProntosBulk() {
+            return await _produto.CriarProdutosProntosBulk();
+        }
         public async Task<Product> LerDocumento(ProductReadDTO produto) {
             PartitionKey partKey = new(produto.CategoryId);
             return await _produto.LerProduto(produto.Id.ToString(), partKey);           
@@ -68,5 +75,6 @@ namespace Dp420Conexao.Service
             
             return produto;
         }
+      
     }
 }

@@ -33,6 +33,20 @@ public class CosmosApiController : ControllerBase
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPost("/bulk")]
+        public async Task<IActionResult> CriarProdutosProntosBulk()
+        {
+            try
+            {
+                var  response = await _productService.CriarProdutosProntosBulk();
+                if ( response) return Ok();
+                return StatusCode(502);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpGet("{id}/{categoryId}")]
         public async Task<IActionResult> GetProduct(Guid id, string categoryId)
