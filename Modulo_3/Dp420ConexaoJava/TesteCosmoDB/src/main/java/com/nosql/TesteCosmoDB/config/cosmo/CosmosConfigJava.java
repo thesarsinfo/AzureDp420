@@ -1,7 +1,5 @@
 package com.nosql.TesteCosmoDB.config.cosmo;
 
-import java.util.Arrays;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -13,8 +11,6 @@ import com.azure.core.credential.AzureKeyCredential;
 import com.azure.cosmos.CosmosClient;
 import com.azure.cosmos.CosmosClientBuilder;
 import com.azure.cosmos.DirectConnectionConfig;
-import com.azure.cosmos.models.CosmosDatabaseResponse;
-import com.azure.cosmos.models.ThroughputProperties;
 import com.azure.spring.data.cosmos.config.AbstractCosmosConfiguration;
 import com.azure.spring.data.cosmos.config.CosmosConfig;
 import com.azure.spring.data.cosmos.core.ResponseDiagnostics;

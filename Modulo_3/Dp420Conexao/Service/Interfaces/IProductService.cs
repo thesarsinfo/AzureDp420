@@ -16,5 +16,8 @@ namespace Dp420Conexao.Service.Interfaces
         Task<bool> ApagarDocumento(ProductReadDTO produto);
         Task<TransactionalBatchResponse> SalvarBatch();
         Task<bool>  CriarProdutosProntosBulk();
+        Task<List<Product>> LerTodosProdutos();
+        Task<List<Product>> LerProdutosPaginados();
+        
     }
 }

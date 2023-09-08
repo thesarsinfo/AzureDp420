@@ -15,5 +15,6 @@ namespace Dp420Conexao.Repository
         Task<bool> ApagarProduto ( string id, PartitionKey categoryId);
         Task<TransactionalBatchResponse> CriarProdutosProntos();
         Task<bool> CriarProdutosProntosBulk();
+        Task<List<Product>> QueryProduto ( QueryDefinition query,QueryRequestOptions opcao);
     }
 }

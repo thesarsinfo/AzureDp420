@@ -34,6 +34,19 @@ namespace Dp420Conexao.Service
             PartitionKey partKey = new(produto.CategoryId);
             return await _produto.LerProduto(produto.Id.ToString(), partKey);           
         }
+        public async Task<List<Product>> LerTodosProdutos() {
+            string sql = "SELECT * FROM product p";
+            QueryDefinition query = new (sql);  
+            QueryRequestOptions options = new();          
+            return await _produto.QueryProduto(query,options);           
+        }
+        public async Task<List<Product>> LerProdutosPaginados() {
+            string sql = "SELECT * FROM product p";
+            QueryDefinition query = new (sql);       
+            QueryRequestOptions options = new(); 
+            options.MaxItemCount = 3;     
+            return await _produto.QueryProduto(query,options);           
+        }
         public async Task<Product> AtualizarDocumento(ProductReadDTO produtoReadDTO,ProductDTO produtoAtualizar) {
             Product produto = await LerDocumento(produtoReadDTO);
             Product produtoAtualizado = ToVOAtualizar(produto, produtoAtualizar);              
@@ -47,14 +60,31 @@ namespace Dp420Conexao.Service
         {
             Product produto = new()
             {
-                Id = Guid.NewGuid() ,
+                Id = Guid.NewGuid(),
                 CategoriaId = product.CategoriaId,
                 Name = product.Name,
                 Price = product.Price,
-                Tags = product.Tags
+                Tags = product.Tags.Select(tagDto => new Tag {
+                    Id = Guid.NewGuid(),
+                    Name = tagDto.Name,
+                    Online = tagDto.Online                
+                }).ToList()
             };
             return produto;
         }
+    public List<Tag> ToVO(List<TagDTO> listaTags)
+    {
+        List<Tag> lista = listaTags.Select(tag => new Tag
+        {
+            Id = tag.Id,
+            Name = tag.Name,
+            Online = tag.Online
+        }).ToList();
+
+        return lista;
+    }
+
+
         public ProductDTO ToDTO(Product product)
         {
             ProductDTO produtoDTO = new()
@@ -62,7 +92,13 @@ namespace Dp420Conexao.Service
                 CategoriaId = product.CategoriaId,
                 Name = product.Name,
                 Price = product.Price,
-                Tags = product.Tags
+                Tags = product.Tags.Select(tag => new TagDTO {
+                    Id = tag.Id,
+                    Name = tag.Name,
+                    Online = tag.Online                
+                }).ToList()
+
+
             };
             return produtoDTO;
         }
@@ -71,7 +107,7 @@ namespace Dp420Conexao.Service
             produto.CategoriaId = (produtoAtualizar.CategoriaId != null)? produtoAtualizar.CategoriaId : produto.CategoriaId;
             produto.Name = (produtoAtualizar.Name != null)? produtoAtualizar.Name : produto.Name;
             produto.Price = (produtoAtualizar.Price != null)? produtoAtualizar.Price : produto.Price;
-            produto.Tags = (produtoAtualizar.Tags != null)? produtoAtualizar.Tags : produto.Tags;
+            produto.Tags = (produtoAtualizar.Tags != null)?  ToVO(produtoAtualizar.Tags): produto.Tags;
             
             return produto;
         }

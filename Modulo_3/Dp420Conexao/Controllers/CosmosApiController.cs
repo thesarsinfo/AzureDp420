@@ -48,6 +48,17 @@ public class CosmosApiController : ControllerBase
             }
         }
 
+        [HttpGet("/todosprodutos")]
+         public async Task<IActionResult> LerTodosProdutos() {
+            var product = await _productService.LerTodosProdutos();
+            return Ok(product);
+        }
+        [HttpGet("/todosprodutos/paginado")]
+         public async Task<IActionResult> LerTodosProdutosPaginado() {
+            var product = await _productService.LerProdutosPaginados();
+            return Ok(product);
+        }
+
         [HttpGet("{id}/{categoryId}")]
         public async Task<IActionResult> GetProduct(Guid id, string categoryId)
         {

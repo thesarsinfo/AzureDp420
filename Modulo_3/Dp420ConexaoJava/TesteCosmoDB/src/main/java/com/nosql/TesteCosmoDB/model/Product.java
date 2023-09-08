@@ -12,19 +12,14 @@ import nonapi.io.github.classgraph.json.Id;
 
 public class Product {
     @Id
-    private String id;
+    private UUID id;
     @PartitionKey
     private String categoryId;
     private String name;
     private BigDecimal price;
     private String[]  tags;
 
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
+   
     public String getCategoryId() {
         return categoryId;
     }
@@ -48,6 +43,12 @@ public class Product {
     }
     public void setTags(String[] tags) {
         this.tags = tags;
+    }
+    public UUID getId() {
+        return id;
+    }
+    public void setId(UUID id) {
+        this.id = id;
     } 
    
 }

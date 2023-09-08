@@ -7,6 +7,7 @@ using Dp420Conexao.Infrastructure.DatabaseContext;
 using Dp420Conexao.Model;
 using Infrastructure.DatabaseContext;
 using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Cosmos.Linq;
 
 namespace Dp420Conexao.Repository
 {
@@ -29,6 +30,17 @@ namespace Dp420Conexao.Repository
         public async Task<Product>  LerProduto ( string id, PartitionKey categoryId){
             return await _caixa.ReadItemAsync<Product>(id,categoryId);
         }
+        public async Task<List<Product>> QueryProduto ( QueryDefinition query,QueryRequestOptions opcao) {
+
+            using FeedIterator<Product> produto = _caixa.GetItemQueryIterator<Product>(query,requestOptions: opcao);
+            List<Product> products = new();
+            while (produto.HasMoreResults){
+                Product response = (Product) await produto.ReadNextAsync();
+                products.Add(response);
+            }
+            return products;
+        }
+
         public async Task<Product>  UpdateProduto ( Product produto){           
             return await _caixa.UpsertItemAsync<Product>(produto);
         }
@@ -43,6 +55,14 @@ namespace Dp420Conexao.Repository
             string[] categorias = {"Queijos","Queijos","Queijos","Queijos"}; 
             string[] nomes = { "mussarella", "tres queijos", "gorgozola", "provolone"};
             double[] precos = {30.05,35.25,26.89,39.56};
+            List<Tag> tagsLista = new();
+            {
+                new Tag(new Guid("856664a0-f6a2-46f3-ad9f-ec61755e67a1"),"Nova Casa",true);
+                new Tag(new Guid("67343c80-85d7-4048-bc56-bb552fb06ac4"),"Pedi pizza",true);
+                new Tag (new Guid("be079986-a0e6-458a-afc6-2691a4ddf175"),"La Majiori",true);
+                new Tag (new Guid("68351a29-7879-4790-9e3d-28d6d7c8f86a"),"Tetera",false);
+            };
+                
             PartitionKey partitionKey = new PartitionKey(categorias[0]);
             for (int i = 0; i < categorias.Length; i++) {
                 Product produto = new()
@@ -50,9 +70,10 @@ namespace Dp420Conexao.Repository
                     Id = Guid.NewGuid() ,
                     CategoriaId = categorias[i],
                     Name = nomes[i],
-                    Price =precos[i]                    
+                    Price =precos[i],
+                    Tags = new List<Tag>{tagsLista[i]}                                      
                 };  
-                   
+               
                 batch = _caixa.CreateTransactionalBatch(partitionKey)
                                                                 .CreateItem<Product>(produto);
             }     
