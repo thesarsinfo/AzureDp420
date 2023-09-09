@@ -1,7 +1,9 @@
 
+using System.Collections.ObjectModel;
 using Dp420Conexao.Infrastructure.DatabaseContext;
 using Microsoft.AspNetCore.Server.IIS.Core;
 using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Cosmos.Fluent;
 
 namespace Infrastructure.DatabaseContext
 {
@@ -25,9 +27,15 @@ namespace Infrastructure.DatabaseContext
             using var client = new CosmosClient(_cosmosDbSettings.Endpoint, _cosmosDbSettings.KeyOne, options);
             try
             {
-                Database database = await client.CreateDatabaseIfNotExistsAsync("Teste420");
-                await database.CreateContainerIfNotExistsAsync("produto", "/CategoriaId", 400);
                 
+                IndexingPolicy policy = this.DefinindoPolicy();
+                ContainerProperties opcaoContainerProduto = new("produto", "/CategoriaId"){IndexingPolicy = policy};
+                ContainerProperties opcaoContainerLogLogin = new("loglogin", "/Email");
+                ContainerProperties opcaoContainerAnalise = new("analise","/id");
+                Database database = await client.CreateDatabaseIfNotExistsAsync("Teste420");
+                await database.CreateContainerIfNotExistsAsync(opcaoContainerProduto, 400);
+                await database.CreateContainerIfNotExistsAsync(opcaoContainerLogLogin,400);
+                await database.CreateContainerIfNotExistsAsync(opcaoContainerAnalise, 400);
                 
             }
             catch (Exception ex)
@@ -53,6 +61,28 @@ namespace Infrastructure.DatabaseContext
             Database database = ConsultarCosmo();
             Container caixa = database.GetContainer(container);
             return caixa;
+        }
+        private IndexingPolicy DefinindoPolicy() 
+        {
+         
+            IndexingPolicy politicaIndex = new()
+            {
+                IndexingMode = IndexingMode.Consistent,
+                Automatic = true                           
+            };
+
+            IncludedPath pathIncluirUm = new() { Path = "/Price/?"};
+            IncludedPath pathIncluirDois = new() {Path = "/Name/?"};
+            politicaIndex.IncludedPaths.Add(pathIncluirUm);
+            politicaIndex.IncludedPaths.Add(pathIncluirDois);
+            ExcludedPath excludePath = new () {Path = "/Tags/[]/id/?"};
+            politicaIndex.ExcludedPaths.Add(excludePath);
+            CompositePath indiceComposto1 = new() {Path = "/Price/",Order = CompositePathSortOrder.Descending};
+            CompositePath indiceComposto2 = new() {Path = "/Name/",Order = CompositePathSortOrder.Ascending};
+            politicaIndex.CompositeIndexes.Add( new Collection<CompositePath>{indiceComposto1} );
+            
+            politicaIndex.CompositeIndexes.Add(new Collection<CompositePath> {indiceComposto2});
+            return politicaIndex;            
         }
     }
 }

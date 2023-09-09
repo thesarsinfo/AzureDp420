@@ -1,5 +1,6 @@
 using Dp420Conexao.Infrastructure.DatabaseContext;
 using Dp420Conexao.Repository;
+using Dp420Conexao.Repository.Interfaces;
 using Dp420Conexao.Service;
 using Infrastructure.DatabaseContext;
 
@@ -11,7 +12,9 @@ var configuration = new ConfigurationBuilder()
 builder.Services.Configure<CosmosDbSettings>(configuration.GetSection("CosmosDbSettings"));
 builder.Services.AddSingleton<ICosmosNoSQLContext,CosmosNoSQLContext>();
 builder.Services.AddSingleton<IProdutoRepository, ProdutoRepository>();
+builder.Services.AddSingleton<ILogLoginRepository, LogLoginRepository>();
 builder.Services.AddTransient<ProductService>();
+builder.Services.AddTransient<LogLoginService>();
 
 
 // Add services to the container.
