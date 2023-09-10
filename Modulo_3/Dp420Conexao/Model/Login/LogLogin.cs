@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Azure.Cosmos;
 
 namespace Dp420Conexao.Model.Login
 {
@@ -13,6 +14,9 @@ namespace Dp420Conexao.Model.Login
         public Localizacao Localizacao {get; set;}
         public Sistema Sistema {get; set;}
 
-
+        public static implicit operator LogLogin(FeedResponse<LogLogin> v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

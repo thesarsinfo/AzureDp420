@@ -18,7 +18,12 @@ namespace Dp420Conexao.Service
         public async Task<LogLogin> CriarLogLogin(LogLoginDTO logLoginDTO)
         {
             LogLogin log = LogLoginDTOVO(logLoginDTO);
-            return await _logLoginRepository.Save(log);
+            var logs = await _logLoginRepository.GetLoginSystem(log);
+            if (logs.Count > 0) {
+                return log;
+            } else {
+                return await _logLoginRepository.Save(log);
+            }
         }
 
         private LogLogin LogLoginDTOVO(LogLoginDTO logLoginDTO)

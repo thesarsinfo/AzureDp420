@@ -10,7 +10,7 @@ namespace Dp420Conexao.Model.Login
     {
         public String NavegadorAgente {get; set;}
         public String Empresa {get; set;}
-        public String Versão {get; set;}
+        public String Versao {get; set;}
         public String Motor {get; set;}
         public Navegador()
         {
@@ -21,7 +21,7 @@ namespace Dp420Conexao.Model.Login
             {
                 NavegadorAgente = navegadorDTO.NavegadorAgente,
                 Empresa = navegadorDTO.Empresa,
-                Versão = navegadorDTO.Versão,
+                Versao = navegadorDTO.Versao,
                 Motor = navegadorDTO.Motor
             };
         }

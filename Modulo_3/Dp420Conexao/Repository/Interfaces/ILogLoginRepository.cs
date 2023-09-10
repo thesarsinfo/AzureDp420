@@ -9,5 +9,6 @@ namespace Dp420Conexao.Repository.Interfaces
     public interface ILogLoginRepository
     {
         public Task<LogLogin> Save( LogLogin log);
+        Task<List<LogLogin>> GetLoginSystem(LogLogin log);
     }
 }

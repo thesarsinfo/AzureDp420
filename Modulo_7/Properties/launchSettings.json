@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "DP420.LoginLog": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7113",
+      "launchBrowser": false
+    }
+  }
+}

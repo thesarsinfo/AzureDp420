@@ -9,7 +9,7 @@ namespace Dp420Conexao.DTO.Login
     {
         public String NavegadorAgente {get; set;}
         public String Empresa {get; set;}
-        public String Versão {get; set;}
+        public String Versao {get; set;}
         public String Motor {get; set;}
     }
 }
